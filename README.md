@@ -48,6 +48,27 @@ To disable set the following javascript variable:
 
     S3BL_IGNORE_PATH = true;
 
+### Hidden files
+
+Some S3 tools create S3 'directories' ( keys ending with "/"), these are shown in the parent
+file listing but hidden in the sub directory listing or they would show up blank.
+Note that if you dont have an index.html in every directory you wil get a "404 Not Found" error from S3.
+
+By default the script hides all files beginning with "."
+
+To change this set the following javascript variable:
+
+   S3_EXCLUDES=/regex-to-exclude/
+
+The default rule is 
+
+  S3_EXCLUDES=/(^\.)/; // hide . files by default
+
+To disable excludes set
+ 
+   S3_EXCLUDES=null
+
+
 ### Configuring the Bucket to List
 
 By default, the script will attempt to guess the bucket based on the url you

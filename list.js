@@ -1,6 +1,9 @@
 if (typeof S3BL_IGNORE_PATH == 'undefined' || S3BL_IGNORE_PATH!=true) {
   var S3BL_IGNORE_PATH = false;
 }
+if (typeof S3_EXCLUDES == 'undefined') {
+  var S3_EXCLUDES=/(^\.)/; // hide . files by default
+}
 
 jQuery(function($) {
   getS3Data();
@@ -136,6 +139,14 @@ function prepareTable(info) {
   jQuery.each(files, function(idx, item) {
     // strip off the prefix
     item.keyText = item.Key.substring(prefix.length);
+
+    // some tools create directory keys like dir/ which show as empty names
+    if( item.keyText == "" ) 
+        return ;
+    // Skip any excluded paths 
+    if (typeof S3_EXCLUDES  != 'undefined' && S3_EXCLUDES != null && S3_EXCLUDES.test(item.keyText) )
+       return ;
+
     if (item.Type === 'directory') {
       if (S3BL_IGNORE_PATH) {
         item.href = location.protocol + '//' + location.hostname + location.pathname + '?prefix=' + item.Key;
